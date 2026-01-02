@@ -4,7 +4,7 @@
     inputs.home-manager.nixosModules.home-manager
     ../../modules/home-manager.nix
     ../../modules/disko.nix
-    { networking.hostId = "ab6cce0f"; }
+    { networking.hostId = "20a48094"; }
     ../../modules/helix.nix
     ../../modules/nushell.nix
     ../../modules/packages.nix

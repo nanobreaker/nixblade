@@ -32,7 +32,41 @@
     let inherit (self) outputs;
     in {
       nixosConfigurations = {
-        cb5 = nixos-raspberrypi.lib.nixosSystemFull {
+
+        cb5-three = nixos-raspberrypi.lib.nixosSystemFull {
+          specialArgs = { inherit inputs outputs nixos-raspberrypi; };
+          modules = [
+            ({ config, pkgs, lib, nixos-raspberrypi, disko, ... }: {
+              imports = with nixos-raspberrypi.nixosModules; [
+                raspberry-pi-5.base
+                raspberry-pi-5.page-size-16k
+                raspberry-pi-5.display-vc4
+                ./hosts/20a48094/configuration.nix
+                ./hosts/20a48094/hardware.nix
+              ];
+            })
+            ({ config, pkgs, lib, ... }:
+              let kernelBundle = pkgs.linuxAndFirmware.v6_6_31;
+              in {
+                boot = {
+                  loader.raspberryPi.firmwarePackage =
+                    kernelBundle.raspberrypifw;
+                  loader.raspberryPi.bootloader = "kernel";
+                  kernelPackages = kernelBundle.linuxPackages_rpi5;
+                };
+
+                nixpkgs.overlays = lib.mkAfter [
+                  (self: super: {
+                    inherit (kernelBundle) raspberrypiWirelessFirmware;
+                    inherit (kernelBundle) raspberrypifw;
+                  })
+                ];
+              })
+
+          ];
+        };
+
+        cb5-four = nixos-raspberrypi.lib.nixosSystemFull {
           specialArgs = { inherit inputs outputs nixos-raspberrypi; };
           modules = [
             ({ config, pkgs, lib, nixos-raspberrypi, disko, ... }: {
