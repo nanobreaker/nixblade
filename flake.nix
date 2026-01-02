@@ -33,7 +33,7 @@
     in {
       nixosConfigurations = {
 
-        cb5-three = nixos-raspberrypi.lib.nixosSystemFull {
+        cb5-1 = nixos-raspberrypi.lib.nixosSystemFull {
           specialArgs = { inherit inputs outputs nixos-raspberrypi; };
           modules = [
             ({ config, pkgs, lib, nixos-raspberrypi, disko, ... }: {
@@ -66,7 +66,7 @@
           ];
         };
 
-        cb5-four = nixos-raspberrypi.lib.nixosSystemFull {
+        cb5-2 = nixos-raspberrypi.lib.nixosSystemFull {
           specialArgs = { inherit inputs outputs nixos-raspberrypi; };
           modules = [
             ({ config, pkgs, lib, nixos-raspberrypi, disko, ... }: {
