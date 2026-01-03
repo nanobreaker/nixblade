@@ -33,6 +33,19 @@
     in {
       nixosConfigurations = {
 
+        cb4 = nixos-raspberrypi.lib.nixosSystem {
+          specialArgs = inputs;
+          modules = [
+            ({ config, pkgs, lib, nixos-raspberrypi, disko, ... }: {
+              imports = with nixos-raspberrypi.nixosModules; [
+                raspberry-pi-4.base
+                raspberry-pi-4.display-vc4
+                ./hosts/32835dd8/configuration.nix
+              ];
+            })
+          ];
+        };
+
         cb5-1 = nixos-raspberrypi.lib.nixosSystemFull {
           specialArgs = { inherit inputs outputs nixos-raspberrypi; };
           modules = [
