@@ -52,7 +52,7 @@
 
   networking.useNetworkd = true;
   networking.firewall.allowedUDPPorts = [ 5353 ];
-  networking.hostName = "computeblade${config.boot.loader.raspberryPi.variant}";
+  networking.hostName = "computeblade2";
   networking.wireless.enable = false;
   networking.wireless.iwd = {
     enable = true;

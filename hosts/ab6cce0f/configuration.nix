@@ -10,10 +10,6 @@
     ../../modules/packages.nix
   ];
 
-  nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features =
-    [ "nix-command" "flakes" "pipe-operators" ];
-
   time.timeZone = "UTC";
 
   users.users.nixos = {
@@ -33,7 +29,10 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIERyckJvgXbUaCY95kGQDTj4Z0XPzTRVJFzbQE0d3sIE nan0br3aker@gmail.com"
   ];
 
-  boot.tmp.useTmpfs = true;
+  boot.tmp.cleanOnBoot = true;
+  boot.tmp.useTmpfs = false;
+  boot.tmp.tmpfsSize = 100;
+  boot.loader.raspberryPi.bootloader = "kernel";
 
   security.polkit.enable = true;
   security.sudo = {
@@ -51,7 +50,7 @@
 
   networking.useNetworkd = true;
   networking.firewall.allowedUDPPorts = [ 5353 ];
-  networking.hostName = "computeblade${config.boot.loader.raspberryPi.variant}";
+  networking.hostName = "computeblade4";
   networking.wireless.enable = false;
   networking.wireless.iwd = {
     enable = true;
@@ -88,8 +87,6 @@
     cfg.bootloader
     config.boot.kernelPackages.kernel.version
   ];
-
-  programs.ssh.startAgent = true;
 
   home-manager.users.nixos.home = {
     homeDirectory = lib.mkForce "/home/nixos";

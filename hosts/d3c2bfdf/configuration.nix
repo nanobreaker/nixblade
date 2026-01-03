@@ -10,10 +10,6 @@
     ../../modules/packages.nix
   ];
 
-  nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features =
-    [ "nix-command" "flakes" "pipe-operators" ];
-
   time.timeZone = "UTC";
 
   users.users.nixos = {
@@ -25,15 +21,20 @@
     shell = pkgs.nushell;
   };
 
-  users.users.root.initialHashedPassword = "";
-  users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIERyckJvgXbUaCY95kGQDTj4Z0XPzTRVJFzbQE0d3sIE nan0br3aker@gmail.com"
-  ];
   users.users.nixos.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIERyckJvgXbUaCY95kGQDTj4Z0XPzTRVJFzbQE0d3sIE nan0br3aker@gmail.com"
   ];
 
-  boot.tmp.useTmpfs = true;
+  users.users.root.initialHashedPassword = "";
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIERyckJvgXbUaCY95kGQDTj4Z0XPzTRVJFzbQE0d3sIE nan0br3aker@gmail.com"
+  ];
+
+  nix.settings.trusted-users = [ "nixos" ];
+
+  boot.tmp.cleanOnBoot = true;
+  boot.tmp.useTmpfs = false;
+  boot.tmp.tmpfsSize = 100;
   boot.loader.raspberryPi.bootloader = "kernel";
 
   security.polkit.enable = true;
@@ -48,11 +49,9 @@
     settings.PermitRootLogin = "yes";
   };
 
-  nix.settings.trusted-users = [ "nixos" ];
-
   networking.useNetworkd = true;
   networking.firewall.allowedUDPPorts = [ 5353 ];
-  networking.hostName = "computeblade${config.boot.loader.raspberryPi.variant}";
+  networking.hostName = "computeblade1";
   networking.wireless.enable = false;
   networking.wireless.iwd = {
     enable = true;
@@ -89,8 +88,6 @@
     cfg.bootloader
     config.boot.kernelPackages.kernel.version
   ];
-
-  programs.ssh.startAgent = true;
 
   home-manager.users.nixos.home = {
     homeDirectory = lib.mkForce "/home/nixos";
