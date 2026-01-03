@@ -40,7 +40,7 @@
               imports = with nixos-raspberrypi.nixosModules; [
                 raspberry-pi-4.base
                 raspberry-pi-4.display-vc4
-                ./hosts/d3c2bfdf/configuration.nix
+                ./hosts/cb1/configuration.nix
               ];
             })
           ];
@@ -53,7 +53,7 @@
               imports = with nixos-raspberrypi.nixosModules; [
                 raspberry-pi-4.base
                 raspberry-pi-4.display-vc4
-                ./hosts/32835dd8/configuration.nix
+                ./hosts/cb2/configuration.nix
               ];
             })
           ];
@@ -67,8 +67,8 @@
                 raspberry-pi-5.base
                 raspberry-pi-5.page-size-16k
                 raspberry-pi-5.display-vc4
-                ./hosts/20a48094/configuration.nix
-                ./hosts/20a48094/hardware.nix
+                ./hosts/cb3/configuration.nix
+                ./hosts/cb3/hardware.nix
               ];
             })
             ({ config, pkgs, lib, ... }:
@@ -100,8 +100,8 @@
                 raspberry-pi-5.base
                 raspberry-pi-5.page-size-16k
                 raspberry-pi-5.display-vc4
-                ./hosts/ab6cce0f/configuration.nix
-                ./hosts/ab6cce0f/hardware.nix
+                ./hosts/cb4/configuration.nix
+                ./hosts/cb4/hardware.nix
               ];
             })
             ({ config, pkgs, lib, ... }:
