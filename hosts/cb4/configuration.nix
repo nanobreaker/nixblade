@@ -2,84 +2,38 @@
   imports = [
     inputs.disko.nixosModules.disko
     inputs.home-manager.nixosModules.home-manager
-    ../../modules/home-manager.nix
+    ../../modules/boot.nix
     ../../modules/disko.nix
-    { networking.hostId = "ab6cce0f"; }
+    ../../modules/git.nix
     ../../modules/helix.nix
+    ../../modules/home-manager.nix
+    ../../modules/networking.nix
     ../../modules/nushell.nix
+    ../../modules/openssh.nix
     ../../modules/packages.nix
+    ../../modules/time.nix
+    ../../modules/udev.nix
   ];
-
-  time.timeZone = "UTC";
 
   users.users.nixos = {
     isNormalUser = true;
     name = "nixos";
     home = "/home/nixos";
-    initialHashedPassword = "";
-    extraGroups = [ "wheel" "networkmanager" "video" ];
+    extraGroups =
+      [ "wheel" "networkmanager" "video" "audio" "input" "dialout" "plugdev" ];
     shell = pkgs.nushell;
   };
 
-  users.users.root.initialHashedPassword = "";
-  users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIERyckJvgXbUaCY95kGQDTj4Z0XPzTRVJFzbQE0d3sIE nan0br3aker@gmail.com"
-  ];
-  users.users.nixos.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIERyckJvgXbUaCY95kGQDTj4Z0XPzTRVJFzbQE0d3sIE nan0br3aker@gmail.com"
-  ];
+  networking.hostId = "ab6cce0f";
+  networking.hostName = "computeblade4";
 
-  boot.tmp.cleanOnBoot = true;
-  boot.tmp.useTmpfs = false;
-  boot.tmp.tmpfsSize = 100;
-  boot.loader.raspberryPi.bootloader = "kernel";
+  nix.settings.trusted-users = [ "nixos" ];
 
   security.polkit.enable = true;
   security.sudo = {
     enable = true;
     wheelNeedsPassword = false;
   };
-
-  services.getty.autologinUser = "nixos";
-  services.openssh = {
-    enable = true;
-    settings.PermitRootLogin = "yes";
-  };
-
-  nix.settings.trusted-users = [ "nixos" ];
-
-  networking.useNetworkd = true;
-  networking.firewall.allowedUDPPorts = [ 5353 ];
-  networking.hostName = "computeblade4";
-  networking.wireless.enable = false;
-  networking.wireless.iwd = {
-    enable = true;
-    settings = {
-      Network = {
-        EnableIPv6 = true;
-        RoutePriorityOffset = 300;
-      };
-      Settings.AutoConnect = true;
-    };
-  };
-
-  systemd.network.networks = {
-    "99-ethernet-default-dhcp".networkConfig.MulticastDNS = "yes";
-    "99-wireless-client-dhcp".networkConfig.MulticastDNS = "yes";
-  };
-
-  systemd.services = {
-    systemd-networkd.stopIfChanged = false;
-    systemd-resolved.stopIfChanged = false;
-  };
-
-  services.udev.extraRules = ''
-    # Ignore partitions with "Required Partition" GPT partition attribute
-    # On our RPis this is firmware (/boot/firmware) partition
-    ENV{ID_PART_ENTRY_SCHEME}=="gpt", \
-      ENV{ID_PART_ENTRY_FLAGS}=="0x1", \
-      ENV{UDISKS_IGNORE}="1"
-  '';
 
   system.nixos.tags = let cfg = config.boot.loader.raspberryPi;
   in [
