@@ -18,6 +18,9 @@
     ../../modules/fonts.nix
   ];
 
+  environment.systemPackages =
+    [ pkgs.chirpstack-concentratord pkgs.chirpstack-mqtt-forwarder ];
+
   users.users.nixos = {
     isNormalUser = true;
     name = "nixos";
