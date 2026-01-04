@@ -1,4 +1,7 @@
-{ inputs, pkgs, config, lib, ... }: {
+{ inputs, pkgs, config, lib, ... }:
+let
+  chirpstack = pkgs.callPackage ../../modules/chirpstack-network-server.nix { };
+in {
   imports = [
     inputs.disko.nixosModules.disko
     inputs.home-manager.nixosModules.home-manager
@@ -16,8 +19,9 @@
     ../../modules/yazi.nix
     ../../modules/starship.nix
     ../../modules/fonts.nix
-    ../../modules/chirpstack-network-server.nix
   ];
+
+  environment.systemPackages = [ chirpstack ];
 
   users.users.nixos = {
     isNormalUser = true;

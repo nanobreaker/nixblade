@@ -93,7 +93,7 @@
         };
 
         cb4 = nixos-raspberrypi.lib.nixosSystemFull {
-          specialArgs = { inherit inputs outputs nixos-raspberrypi; };
+          specialArgs = { inherit inputs nixos-raspberrypi; };
           modules = [
             ({ config, pkgs, lib, nixos-raspberrypi, disko, ... }: {
               imports = with nixos-raspberrypi.nixosModules; [
