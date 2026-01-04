@@ -1,6 +1,6 @@
 { ... }: {
-
   home-manager.sharedModules = [{
+
     programs.starship = {
       enable = true;
       settings = {
@@ -13,7 +13,7 @@
 
         hostname = {
           ssh_only = true;
-          ssh_symbol = '';
+          ssh_symbol = "";
         };
 
         directory = {
@@ -21,12 +21,13 @@
           truncation_length = 1;
           fish_style_pwd_dir_length = 1;
         };
-        
+
         character = {
           success_symbol = "|>";
           error_symbol = "|>";
         };
       };
     };
+
   }];
 }
