@@ -15,6 +15,7 @@
     ../../modules/udev.nix
     ../../modules/yazi.nix
     ../../modules/starship.nix
+    ../../modules/fonts.nix
   ];
 
   users.users.nixos = {

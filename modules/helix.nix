@@ -1,15 +1,12 @@
-{ lib, pkgs, ... }: {
+{ pkgs, ... }: {
   environment = { shellAliases.x = "hx"; };
+  home.sessionVariables = { EDITOR = "helix"; };
 
-  environment.systemPackages = [
-    pkgs.nixfmt-rfc-style
-    pkgs.nil
-    pkgs.clang
-    pkgs.clang-tools
-  ];
+  environment.systemPackages =
+    [ pkgs.nixfmt-rfc-style pkgs.nil pkgs.clang pkgs.clang-tools ];
 
   home-manager.sharedModules = [{
-    
+
     programs.helix = {
       enable = true;
       defaultEditor = true;
@@ -70,6 +67,6 @@
 
     };
 
-    }];
-    
+  }];
+
 }

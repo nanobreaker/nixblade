@@ -1,8 +1,9 @@
 { ... }: {
+  home.sessionVariables = { TERMINAL = "ghostty"; };
   environment.variables = { TERMINAL = "ghostty"; };
 
   home-manager.sharedModules = [{
-    
+
     programs.ghostty = {
       enable = true;
 

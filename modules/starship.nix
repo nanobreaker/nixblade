@@ -9,7 +9,7 @@
         command_timeout = 1300;
         scan_timeout = 30;
 
-        format = "$directory@$hostname$character";
+        format = "$directory$character";
 
         character = {
           success_symbol = "|>";
