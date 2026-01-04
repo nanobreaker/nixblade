@@ -1,7 +1,5 @@
 { pkgs, ... }: {
   environment = { shellAliases.x = "hx"; };
-  home.sessionVariables = { EDITOR = "helix"; };
-
   environment.systemPackages =
     [ pkgs.nixfmt-rfc-style pkgs.nil pkgs.clang pkgs.clang-tools ];
 

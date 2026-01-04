@@ -1,5 +1,4 @@
 { ... }: {
-  home.sessionVariables = { TERMINAL = "ghostty"; };
   environment.variables = { TERMINAL = "ghostty"; };
 
   home-manager.sharedModules = [{
