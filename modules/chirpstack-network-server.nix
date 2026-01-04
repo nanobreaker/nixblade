@@ -7,7 +7,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url =
       "https://artifacts.chirpstack.io/downloads/chirpstack/chirpstack_${version}_sqlite_linux_arm64.tar.gz";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-WKMIPCIhcIO/woe6SOE+clnvH8nwMt14RPO/vf0a45s=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
