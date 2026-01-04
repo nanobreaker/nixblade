@@ -16,6 +16,7 @@
     ../../modules/yazi.nix
     ../../modules/starship.nix
     ../../modules/fonts.nix
+    ../../modules/chirpstack-network-server.nix
   ];
 
   users.users.nixos = {
