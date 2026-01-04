@@ -1,11 +1,10 @@
-{ config, lib, ... }:
+{ lib, ... }:
 
 let
   firmwarePartition = lib.recursiveUpdate {
-    # label = "FIRMWARE";
     priority = 1;
 
-    type = "0700";  # Microsoft basic data
+    type = "0700"; # Microsoft basic data
     attributes = [
       0 # Required Partition
     ];
@@ -14,20 +13,17 @@ let
     content = {
       type = "filesystem";
       format = "vfat";
-      # mountpoint = "/boot/firmware";
       mountOptions = [
         "noatime"
-        "noauto"
-        "x-systemd.automount"
-        "x-systemd.idle-timeout=1min"
+        # "noauto"
+        # "x-systemd.automount"
+        # "x-systemd.idle-timeout=1min"
       ];
     };
   };
 
   espPartition = lib.recursiveUpdate {
-    # label = "ESP";
-
-    type = "EF00";  # EFI System Partition (ESP)
+    type = "EF00"; # EFI System Partition (ESP)
     attributes = [
       2 # Legacy BIOS Bootable, for U-Boot to find extlinux config
     ];
@@ -39,9 +35,9 @@ let
       # mountpoint = "/boot";
       mountOptions = [
         "noatime"
-        "noauto"
-        "x-systemd.automount"
-        "x-systemd.idle-timeout=1min"
+        # "noauto"
+        # "x-systemd.automount"
+        # "x-systemd.idle-timeout=1min"
         "umask=0077"
       ];
     };
@@ -50,7 +46,6 @@ let
 in {
 
   boot.supportedFilesystems = [ "zfs" ];
-  # networking.hostId is set somewhere else
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
@@ -82,7 +77,7 @@ in {
 
         };
       };
-    };  #nvme0
+    }; # nvme0
 
     zpool = {
       rpool = {
@@ -91,7 +86,7 @@ in {
         # zpool properties
         options = {
           ashift = "12";
-          autotrim = "on";  # see also services.zfs.trim.enable
+          autotrim = "on"; # see also services.zfs.trim.enable
         };
 
         # zfs properties
@@ -109,8 +104,7 @@ in {
           canmount = "off";
         };
 
-        postCreateHook = let
-          poolName = "rpool";
+        postCreateHook = let poolName = "rpool";
         in "zfs list -t snapshot -H -o name | grep -E '^${poolName}@blank$' || zfs snapshot ${poolName}@blank";
 
         datasets = {
@@ -124,30 +118,24 @@ in {
             type = "zfs_fs";
             options = {
               reservation = "128M";
-              mountpoint = "legacy";  # to manage "with traditional tools"
+              mountpoint = "legacy"; # to manage "with traditional tools"
             };
-            mountpoint = "/nix";  # nixos configuration mountpoint
+            mountpoint = "/nix"; # nixos configuration mountpoint
           };
 
           # _system_ data
           system = {
             type = "zfs_fs";
-            options = {
-              mountpoint = "none";
-            };
+            options = { mountpoint = "none"; };
           };
           "system/root" = {
             type = "zfs_fs";
-            options = {
-              mountpoint = "legacy";
-            };
+            options = { mountpoint = "legacy"; };
             mountpoint = "/";
           };
           "system/var" = {
             type = "zfs_fs";
-            options = {
-              mountpoint = "legacy";
-            };
+            options = { mountpoint = "legacy"; };
             mountpoint = "/var";
           };
 
@@ -161,16 +149,12 @@ in {
           };
           "safe/home" = {
             type = "zfs_fs";
-            options = {
-              mountpoint = "legacy";
-            };
+            options = { mountpoint = "legacy"; };
             mountpoint = "/home";
           };
           "safe/var/lib" = {
             type = "zfs_fs";
-            options = {
-              mountpoint = "legacy";
-            };
+            options = { mountpoint = "legacy"; };
             mountpoint = "/var/lib";
           };
 
