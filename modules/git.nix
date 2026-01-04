@@ -5,9 +5,11 @@
   home-manager.sharedModules = [{
     programs.git = {
       enable = true;
-      userName = "nanobreaker";
-      userEmail = "nan0br3aker@gmail.com";
-      extraConfig = { core.editor = "hx"; };
+      settings = {
+        core.editor = "hx";
+        user.name = "nanobreaker";
+        user.email = "nan0br3aker@gmail.com";
+      };
     };
   }];
 }

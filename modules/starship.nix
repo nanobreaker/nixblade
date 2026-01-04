@@ -11,15 +11,20 @@
 
         format = "$hostname$directory$character";
 
-        character = {
-          success_symbol = "|>";
-          error_symbol = "|>";
+        hostname = {
+          ssh_only = true;
+          ssh_symbol = '';
         };
 
         directory = {
           format = "[$path]($style) ";
           truncation_length = 1;
           fish_style_pwd_dir_length = 1;
+        };
+        
+        character = {
+          success_symbol = "|>";
+          error_symbol = "|>";
         };
       };
     };
