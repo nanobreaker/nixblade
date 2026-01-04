@@ -13,6 +13,8 @@
     ../../modules/packages.nix
     ../../modules/time.nix
     ../../modules/udev.nix
+    ../../modules/yazi.nix
+    ../../modules/starship.nix
   ];
 
   users.users.nixos = {

@@ -1,10 +1,10 @@
 { pkgs, ... }: {
   environment.systemPackages = with pkgs; [
-    uutils-coreutils-noprefix
-    pstree
-    neofetch
-    ripgrep
     btop
+    fastfetch
+    pstree
+    ripgrep
     systemctl-tui
+    uutils-coreutils-noprefix
   ];
 }
