@@ -8,20 +8,19 @@
 let
   cfg = config.services.chirpstack-concentratord;
 
-  defaultPkg = pkgs.callPackage ../../pkgs/chirpstack-concentratord/package.nix { };
-
-  inherit (cfg) configDir;
   configSource =
     if cfg.configFile != null then
       cfg.configFile
     else
       pkgs.writeText "concentratord.toml" cfg.configText;
 
-  exec = lib.concatStringsSep " " (
+  configPath = "${cfg.configDir}/concentratord.toml";
+
+  exec = lib.escapeShellArgs (
     [
-      "${cfg.package}/bin/${cfg.binaryName}"
+      (lib.getExe' cfg.package cfg.binaryName)
       "-c"
-      "${configDir}/concentratord.toml"
+      configPath
     ]
     ++ cfg.extraArgs
   );
@@ -32,20 +31,22 @@ in
 
     package = lib.mkOption {
       type = lib.types.package;
-      default = defaultPkg;
-      description = "Package providing chirpstack-concentratord.";
+      default = pkgs.chirpstack-concentratord;
+      defaultText = lib.literalExpression "pkgs.chirpstack-concentratord";
+      description = "Package providing ChirpStack Concentratord.";
     };
 
     binaryName = lib.mkOption {
       type = lib.types.str;
       default = "chirpstack-concentratord-sx1302";
-      description = "Binary name inside the package /bin.";
+      description = "Concentratord binary to run.";
     };
 
     user = lib.mkOption {
       type = lib.types.str;
       default = "chirpstack";
     };
+
     group = lib.mkOption {
       type = lib.types.str;
       default = "chirpstack";
@@ -54,7 +55,7 @@ in
     stateDir = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/chirpstack-concentratord";
-      description = "Writable state directory (logs/runtime files if configured).";
+      description = "Writable state directory.";
     };
 
     configDir = lib.mkOption {
@@ -66,27 +67,29 @@ in
     configFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
-      description = "Path to concentratord.toml to install into configDir.";
+      description = "Path to concentratord.toml.";
     };
 
     configText = lib.mkOption {
       type = lib.types.lines;
-      default = ''
-        # Provide TOML via services.chirpstack-concentratord.configFile
-        # or override this inline TOML.
-      '';
-      description = "Inline concentratord.toml content used when configFile is null.";
+      default = "";
+      description = "Inline concentratord.toml used when configFile is null.";
     };
 
     extraArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
-      description = "Extra CLI args passed to chirpstack-concentratord.";
+      description = "Additional command-line arguments.";
     };
   };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      cfg.package
+    ];
+
     users.groups.${cfg.group} = { };
+
     users.users.${cfg.user} = {
       isSystemUser = true;
       inherit (cfg) group;
@@ -100,7 +103,6 @@ in
       "d ${cfg.configDir} 0755 root root - -"
     ];
 
-    # Install /etc/chirpstack-concentratord/concentratord.toml
     environment.etc."chirpstack-concentratord/concentratord.toml" = {
       source = configSource;
       mode = "0644";
@@ -116,17 +118,21 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
+
         WorkingDirectory = cfg.stateDir;
+
         RuntimeDirectory = "chirpstack-concentratord";
         RuntimeDirectoryMode = "0775";
+
         UMask = "0002";
+
         ExecStart = exec;
 
         Restart = "on-failure";
         RestartSec = 2;
 
         NoNewPrivileges = true;
-        ProtectSystem = "no";
+
         ReadWritePaths = [
           cfg.stateDir
           "/run/chirpstack-concentratord"

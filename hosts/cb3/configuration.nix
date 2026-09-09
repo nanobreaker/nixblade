@@ -30,6 +30,7 @@
     ../../modules/time.nix
     ../../modules/udev.nix
     ../../modules/yazi.nix
+    ../../modules/chirpstack-concentratord/module.nix
   ];
 
   networking.hostId = "20a48094";
@@ -61,6 +62,11 @@
   home-manager.users.root.home = {
     homeDirectory = lib.mkForce "/root";
     stateVersion = "26.05";
+  };
+
+  services.chirpstack-concentratord = {
+    enable = true;
+    configFile = ../../modules/chirpstack-concentratord/concentratord.toml;
   };
 
   system.nixos.tags =
